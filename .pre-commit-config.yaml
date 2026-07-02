@@ -1,0 +1,90 @@
+default_stages: [pre-commit]
+fail_fast: false
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-added-large-files
+        args: ["--maxkb=1024"]
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: check-yaml
+      - id: debug-statements
+        files: ^backend/.*\.py$
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+      - id: trailing-whitespace
+
+  - repo: local
+    hooks:
+      - id: backend-ruff-check
+        name: backend ruff check
+        entry: python scripts/pre_commit.py backend ruff-check
+        language: system
+        pass_filenames: false
+        files: ^backend/.*\.py$
+
+      - id: backend-ruff-format
+        name: backend ruff format
+        entry: python scripts/pre_commit.py backend ruff-format
+        language: system
+        pass_filenames: false
+        files: ^backend/.*\.py$
+
+      - id: backend-pyrefly
+        name: backend pyrefly
+        entry: python scripts/pre_commit.py backend pyrefly
+        language: system
+        pass_filenames: false
+        files: ^backend/.*\.py$
+        stages: [pre-push]
+
+      - id: backend-vulture
+        name: backend vulture
+        entry: python scripts/pre_commit.py backend vulture
+        language: system
+        pass_filenames: false
+        files: ^backend/.*\.py$
+        stages: [pre-push]
+
+      - id: backend-tests
+        name: backend tests
+        entry: python scripts/pre_commit.py backend pytest
+        language: system
+        pass_filenames: false
+        files: ^backend/.*\.(py|toml|ya?ml)$
+        stages: [pre-push]
+
+      - id: frontend-format
+        name: frontend format
+        entry: python scripts/pre_commit.py frontend format
+        language: system
+        pass_filenames: false
+        files: ^frontend-spa/.*\.(css|html|js|jsx|json|md|scss|ts|tsx|ya?ml)$
+
+      - id: frontend-lint
+        name: frontend lint
+        entry: python scripts/pre_commit.py frontend lint
+        language: system
+        pass_filenames: false
+        files: ^frontend-spa/.*\.(js|jsx|ts|tsx)$
+
+      - id: frontend-typecheck
+        name: frontend typecheck
+        entry: python scripts/pre_commit.py frontend typecheck
+        language: system
+        pass_filenames: false
+        files: ^frontend-spa/.*\.(js|jsx|ts|tsx)$
+        stages: [pre-push]
+
+      - id: frontend-tests
+        name: frontend tests
+        entry: python scripts/pre_commit.py frontend test:ci
+        language: system
+        pass_filenames: false
+        files: ^frontend-spa/.*\.(js|jsx|ts|tsx)$
+        stages: [pre-push]
