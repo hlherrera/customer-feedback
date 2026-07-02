@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -43,10 +45,15 @@ def frontend(script_name: str) -> int:
 
     scripts = package.get("scripts", {})
     if script_name not in scripts:
-        print(f"Skipping frontend {script_name}: npm script not found")
+        print(f"Skipping frontend {script_name}: pnpm script not found")
         return 0
 
-    return run(["npm", "run", script_name], FRONTEND)
+    pnpm = shutil.which("pnpm.cmd" if os.name == "nt" else "pnpm")
+    if pnpm:
+        return run([pnpm, "run", script_name], FRONTEND)
+
+    corepack = shutil.which("corepack.cmd" if os.name == "nt" else "corepack") or "corepack"
+    return run([corepack, "pnpm", "run", script_name], FRONTEND)
 
 
 def main() -> int:

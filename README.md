@@ -18,8 +18,8 @@ Start the frontend in another terminal:
 
 ```powershell
 cd frontend-spa
-npm install
-npm run dev
+corepack pnpm install
+corepack pnpm dev
 ```
 
 Frontend: `http://127.0.0.1:5173`
@@ -39,7 +39,7 @@ Frontend:
 
 ```powershell
 cd frontend-spa
-npm run lint
-npm run typecheck
-npm run test:ci
+corepack pnpm lint
+corepack pnpm typecheck
+corepack pnpm test:ci
 ```
