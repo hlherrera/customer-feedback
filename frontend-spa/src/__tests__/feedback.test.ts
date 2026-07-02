@@ -1,0 +1,38 @@
+import { validateFeedbackDraft } from "../lib/feedback";
+
+describe("validateFeedbackDraft", () => {
+  it("accepts a complete valid draft", () => {
+    expect(
+      validateFeedbackDraft({
+        email: "person@example.com",
+        comment: "Great coffee.",
+        rating: 5,
+        highlight: "Coffee",
+      }),
+    ).toEqual({
+      ok: true,
+      value: {
+        email: "person@example.com",
+        comment: "Great coffee.",
+        rating: 5,
+        highlight: "Coffee",
+      },
+    });
+  });
+
+  it("rejects an invalid email", () => {
+    expect(
+      validateFeedbackDraft({
+        email: "person",
+        comment: "Great coffee.",
+        rating: 5,
+        highlight: "Coffee",
+      }),
+    ).toEqual({
+      ok: false,
+      errors: {
+        email: "Enter a valid email address.",
+      },
+    });
+  });
+});

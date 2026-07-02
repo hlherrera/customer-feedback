@@ -1,0 +1,142 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`FeedbackForm matches the simple form snapshot 1`] = `
+<form
+  class="space-y-5 rounded border border-cafe-200 bg-white p-5 shadow-sm"
+>
+  <div
+    class="space-y-2"
+  >
+    <label
+      class="block text-sm font-medium text-cafe-700"
+      for="email"
+    >
+      Email
+    </label>
+    <input
+      class="h-11 w-full rounded border border-cafe-200 px-3 text-ink outline-none transition focus:border-cafe-500 focus:ring-2 focus:ring-cafe-100"
+      id="email"
+      required=""
+      type="email"
+      value=""
+    />
+  </div>
+  <div
+    class="space-y-2"
+  >
+    <label
+      class="block text-sm font-medium text-cafe-700"
+      for="comment"
+    >
+      Comment
+    </label>
+    <textarea
+      class="min-h-32 w-full rounded border border-cafe-200 px-3 py-2 text-ink outline-none transition focus:border-cafe-500 focus:ring-2 focus:ring-cafe-100"
+      id="comment"
+      required=""
+    />
+  </div>
+  <div
+    class="space-y-2"
+  >
+    <span
+      class="block text-sm font-medium text-cafe-700"
+    >
+      Overall rating
+    </span>
+    <div
+      aria-label="Overall rating"
+      class="grid grid-cols-5 gap-2"
+      role="radiogroup"
+    >
+      <button
+        aria-checked="false"
+        class="h-11 rounded border text-sm font-semibold transition border-cafe-200 bg-white text-cafe-700 hover:border-cafe-500"
+        role="radio"
+        type="button"
+      >
+        1
+      </button>
+      <button
+        aria-checked="false"
+        class="h-11 rounded border text-sm font-semibold transition border-cafe-200 bg-white text-cafe-700 hover:border-cafe-500"
+        role="radio"
+        type="button"
+      >
+        2
+      </button>
+      <button
+        aria-checked="false"
+        class="h-11 rounded border text-sm font-semibold transition border-cafe-200 bg-white text-cafe-700 hover:border-cafe-500"
+        role="radio"
+        type="button"
+      >
+        3
+      </button>
+      <button
+        aria-checked="false"
+        class="h-11 rounded border text-sm font-semibold transition border-cafe-200 bg-white text-cafe-700 hover:border-cafe-500"
+        role="radio"
+        type="button"
+      >
+        4
+      </button>
+      <button
+        aria-checked="false"
+        class="h-11 rounded border text-sm font-semibold transition border-cafe-200 bg-white text-cafe-700 hover:border-cafe-500"
+        role="radio"
+        type="button"
+      >
+        5
+      </button>
+    </div>
+  </div>
+  <div
+    class="space-y-2"
+  >
+    <label
+      class="block text-sm font-medium text-cafe-700"
+      for="highlight"
+    >
+      Visit highlight
+    </label>
+    <select
+      class="h-11 w-full rounded border border-cafe-200 bg-white px-3 text-cafe-700 outline-none transition focus:border-cafe-500 focus:ring-2 focus:ring-cafe-100"
+      id="highlight"
+      required=""
+    >
+      <option
+        value=""
+      >
+        Select one
+      </option>
+      <option
+        value="Food"
+      >
+        Food
+      </option>
+      <option
+        value="Coffee"
+      >
+        Coffee
+      </option>
+      <option
+        value="Service"
+      >
+        Service
+      </option>
+      <option
+        value="Atmosphere"
+      >
+        Atmosphere
+      </option>
+    </select>
+  </div>
+  <button
+    class="h-11 w-full rounded bg-cafe-700 px-4 text-sm font-semibold text-white transition hover:bg-cafe-500 disabled:cursor-not-allowed disabled:bg-cafe-200 disabled:text-cafe-700"
+    type="submit"
+  >
+    Submit feedback
+  </button>
+</form>
+`;
