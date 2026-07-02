@@ -26,7 +26,7 @@ corepack prepare pnpm@11.9.0 --activate
 
 Start the API with local SQLite persistence:
 
-```powershell
+```bash
 cd backend
 uv venv --python 3.13
 uv sync --group dev
@@ -38,7 +38,7 @@ This creates `backend/feedback.db` and stores submissions there.
 
 Start the frontend in another terminal:
 
-```powershell
+```bash
 cd frontend-spa
 corepack pnpm install
 corepack pnpm dev
@@ -49,9 +49,9 @@ API: `http://127.0.0.1:8000/api/feedback`
 
 To run the API with Postgres instead of SQLite:
 
-```powershell
+```bash
 cd backend
-copy .env.example .env
+cp .env.example .env
 docker compose up --build
 ```
 

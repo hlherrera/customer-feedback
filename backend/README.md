@@ -6,16 +6,15 @@ Python note: Python has no official LTS label. This uses Python 3.13 for stable 
 
 ## Local
 
-```powershell
-cd C:\Users\hlher\OneDrive\Documentos\customer-feedback\backend
+```bash
+cd backend
 uv venv --python 3.13
 uv sync --group dev
-copy .env.example .env
-@"
+cat > .env <<'EOF'
 APP_HOST=127.0.0.1
 APP_PORT=8000
 DATABASE_URL=sqlite+pysqlite:///./feedback.db
-"@ | Set-Content .env
+EOF
 uv run python run.py
 ```
 
@@ -28,7 +27,7 @@ Docker Desktop must be set to Linux containers for these images.
 Copy `.env.example` to `.env` and set `SONAR_TOKEN` before running the quality
 profile.
 
-```powershell
+```bash
 docker compose up --build
 ```
 
@@ -36,7 +35,7 @@ API: `http://127.0.0.1:8000/api/feedback`
 
 ## Quality
 
-```powershell
+```bash
 uv run ruff check .
 uv run vulture
 uv run pytest --cov=app --cov-report=xml
@@ -46,8 +45,8 @@ uv run pytest --cov=app --cov-report=xml
 
 Install the repo hooks from the workspace root:
 
-```powershell
-cd C:\Users\hlher\OneDrive\Documentos\customer-feedback
+```bash
+cd customer-feedback
 uvx pre-commit install --hook-type pre-commit --hook-type pre-push
 uvx pre-commit run --all-files
 ```
@@ -59,12 +58,12 @@ enabled automatically when `frontend-spa/package.json` defines `format`, `lint`,
 
 Run Sonar after server is up:
 
-```powershell
+```bash
 uv run pytest --cov=app --cov-report=xml
 docker compose --profile quality up -d sonarqube
-$env:SONAR_TOKEN=(Get-Content .env | Where-Object { $_ -match '^SONAR_TOKEN=' } | ForEach-Object { $_.Split('=', 2)[1] })
-$env:PYTHONIOENCODING="utf-8"
-uv run pysonar --sonar-host-url http://127.0.0.1:9000 --sonar-token $env:SONAR_TOKEN --sonar-qualitygate-wait
+export SONAR_TOKEN="$(grep '^SONAR_TOKEN=' .env | cut -d= -f2-)"
+export PYTHONIOENCODING="utf-8"
+uv run pysonar --sonar-host-url http://127.0.0.1:9000 --sonar-token "$SONAR_TOKEN" --sonar-qualitygate-wait
 ```
 
 Set the 90% coverage quality gate in SonarQube, then `--sonar-qualitygate-wait`
@@ -75,7 +74,7 @@ SonarQube: `http://127.0.0.1:9000`
 The Compose file uses the active `sonarqube:community` image. If Docker has an
 older local image cached, refresh it with:
 
-```powershell
+```bash
 docker compose --profile quality pull sonarqube
 docker compose --profile quality up -d sonarqube
 ```

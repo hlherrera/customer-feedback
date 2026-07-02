@@ -53,7 +53,7 @@ Controller flow:
 
 Use `uv` for local dependency and command execution.
 
-```powershell
+```bash
 uv sync --group dev
 uv run pytest
 uv run ruff check .
@@ -64,14 +64,14 @@ uv run pytest --cov=app --cov-report=xml
 
 SonarQube runs from Docker Compose:
 
-```powershell
+```bash
 docker compose up sonarqube
-sonar-scanner -Dsonar.host.url=http://127.0.0.1:9000 -Dsonar.token=$env:SONAR_TOKEN
+sonar-scanner -Dsonar.host.url=http://127.0.0.1:9000 -Dsonar.token="$SONAR_TOKEN"
 ```
 
 ## Local Run
 
-```powershell
+```bash
 uv run python run.py
 ```
 

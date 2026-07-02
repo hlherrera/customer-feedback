@@ -44,7 +44,7 @@ feedback. Keep it simple, typed, and easy to review.
 
 Use pnpm from `frontend-spa`.
 
-```powershell
+```bash
 corepack pnpm install
 corepack pnpm lint
 corepack pnpm typecheck
@@ -56,7 +56,7 @@ Use Corepack when pnpm is not installed directly.
 
 ## Local Run
 
-```powershell
+```bash
 corepack pnpm dev
 ```
 
