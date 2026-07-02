@@ -1,0 +1,29 @@
+meta {
+  name: create feedback
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/feedback
+  body: json
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "email": "person@example.com",
+    "comment": "Great coffee.",
+    "rating": 5,
+    "highlight": "Coffee"
+  }
+}
+
+tests {
+  test("created", function () {
+    expect(res.status).to.equal(201);
+  });
+}

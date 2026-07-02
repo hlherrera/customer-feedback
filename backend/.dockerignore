@@ -1,0 +1,33 @@
+# Local environments
+.venv/
+.env
+
+# Python/cache artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.sonar/
+
+# Coverage and test output
+.coverage
+coverage.xml
+htmlcov/
+
+# Development-only files
+tests/
+bruno/
+AGENTS.md
+HANDOVER.md
+sonar-project.properties
+docker-compose.yml
+
+# Local data
+feedback.db
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
