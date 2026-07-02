@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { HIGHLIGHTS } from "../constants";
 import type {
   FeedbackDraft,
@@ -11,54 +12,47 @@ export const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 type ValidationResult =
   { ok: true; value: FeedbackPayload } | { ok: false; errors: FeedbackErrors };
 
-const isHighlight = (value: string): value is Highlight =>
-  HIGHLIGHTS.includes(value as Highlight);
+const highlightValues = HIGHLIGHTS as [Highlight, ...Highlight[]];
+
+const feedbackDraftSchema = z.object({
+  email: z
+    .string()
+    .trim()
+    .min(1, "Email is required.")
+    .regex(emailPattern, "Enter a valid email address."),
+  comment: z.string().trim().min(1, "Comment is required."),
+  rating: z
+    .number("Choose a rating from 1 to 5.")
+    .int("Choose a rating from 1 to 5.")
+    .min(1, "Choose a rating from 1 to 5.")
+    .max(5, "Choose a rating from 1 to 5."),
+  highlight: z.enum(highlightValues, {
+    error: "Choose one highlight.",
+  }),
+});
 
 export const validateFeedbackDraft = (
   draft: FeedbackDraft,
 ): ValidationResult => {
-  const email = draft.email.trim();
-  const comment = draft.comment.trim();
-  const rating = draft.rating;
-  const highlight = draft.highlight;
-  const errors: FeedbackErrors = {};
+  const result = feedbackDraftSchema.safeParse(draft);
 
-  if (!email) {
-    errors.email = "Email is required.";
-  } else if (!emailPattern.test(email)) {
-    errors.email = "Enter a valid email address.";
-  }
-
-  if (!comment) {
-    errors.comment = "Comment is required.";
-  }
-
-  if (
-    rating === null ||
-    !Number.isInteger(rating) ||
-    rating < 1 ||
-    rating > 5
-  ) {
-    errors.rating = "Choose a rating from 1 to 5.";
-  }
-
-  if (!highlight || !isHighlight(highlight)) {
-    errors.highlight = "Choose one highlight.";
-  }
-
-  if (Object.keys(errors).length > 0) {
-    return { ok: false, errors };
+  if (!result.success) {
+    return { ok: false, errors: toFeedbackErrors(result.error.issues) };
   }
 
   return {
     ok: true,
-    value: {
-      email,
-      comment,
-      rating: rating as number,
-      highlight: highlight as Highlight,
-    },
+    value: result.data,
   };
 };
+
+const toFeedbackErrors = (issues: z.core.$ZodIssue[]): FeedbackErrors =>
+  issues.reduce<FeedbackErrors>((errors, issue) => {
+    const field = issue.path[0];
+    if (typeof field === "string" && !(field in errors)) {
+      return { ...errors, [field]: issue.message };
+    }
+    return errors;
+  }, {});
 
 export const formatFeedbackDate = (value: string): string => value.slice(0, 10);

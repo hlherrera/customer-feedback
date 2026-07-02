@@ -2,6 +2,7 @@ import type { SubmitEvent } from "react";
 import { Field } from "./Field";
 import { HighlightSelect } from "./HighlightSelect";
 import { RatingInput } from "./RatingInput";
+import { emailPattern } from "../lib/feedback";
 import type { FeedbackDraft, FeedbackErrors } from "../types";
 
 type FeedbackFormProps = {
@@ -34,6 +35,7 @@ export const FeedbackForm = ({
           className="h-11 w-full rounded border border-cafe-200 px-3 text-ink outline-none transition focus:border-cafe-500 focus:ring-2 focus:ring-cafe-100"
           id="email"
           type="email"
+          pattern={emailPattern.source}
           value={draft.email}
           onChange={(event) =>
             onChange({ ...draft, email: event.target.value })

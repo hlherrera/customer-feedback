@@ -19,6 +19,9 @@ importers:
       vite:
         specifier: ^7.3.0
         version: 7.3.6(@types/node@26.0.1)(jiti@1.21.7)
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
     devDependencies:
       "@eslint/js":
         specifier: ^9.39.2

@@ -16,6 +16,7 @@ exports[`FeedbackForm matches the simple form snapshot 1`] = `
     <input
       class="h-11 w-full rounded border border-cafe-200 px-3 text-ink outline-none transition focus:border-cafe-500 focus:ring-2 focus:ring-cafe-100"
       id="email"
+      pattern="^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"
       required=""
       type="email"
       value=""
