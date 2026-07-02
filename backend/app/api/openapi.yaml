@@ -69,13 +69,13 @@ components:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/Problem"
+            $ref: "#/components/schemas/ErrorResponse"
     UnsupportedMediaType:
       description: Unsupported media type
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/Problem"
+            $ref: "#/components/schemas/ErrorResponse"
   schemas:
     FeedbackCreate:
       type: object
@@ -123,7 +123,7 @@ components:
         created_at:
           type: string
           format: date-time
-    Problem:
+    ErrorResponse:
       type: object
       required: [title, detail, status]
       additionalProperties: true
