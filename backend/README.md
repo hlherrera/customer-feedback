@@ -19,7 +19,13 @@ uv run python run.py
 ```
 
 API: `http://127.0.0.1:8000/api/feedback`
+Cafes: `http://127.0.0.1:8000/api/cafes`
 Docs: `http://127.0.0.1:8000/api/ui/`
+
+The API seeds `McDonald's`, `BK`, and `KFC` for cafe selection. Feedback create
+requests include `cafe_id`, and feedback responses include the embedded cafe
+object. Existing local SQLite files from the previous schema should be removed
+before running because this project does not use migrations.
 
 ## Docker
 
@@ -32,6 +38,7 @@ docker compose up --build
 ```
 
 API: `http://127.0.0.1:8000/api/feedback`
+Cafes: `http://127.0.0.1:8000/api/cafes`
 
 ## Quality
 

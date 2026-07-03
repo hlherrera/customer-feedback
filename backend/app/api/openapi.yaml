@@ -8,7 +8,36 @@ servers:
 tags:
   - name: Feedback
     description: Customer feedback submissions
+  - name: Cafes
+    description: Available cafe/store choices
 paths:
+  /cafes:
+    get:
+      tags: [Cafes]
+      operationId: app.api.controllers.cafe_controller.list_cafes
+      summary: List available cafes
+      description: Returns seeded cafe/store choices for feedback submissions.
+      responses:
+        "200":
+          description: Available cafes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cafe"
+              examples:
+                seeded:
+                  value:
+                    - id: 1
+                      name: "McDonald's"
+                      description: Quick-service cafe counter for familiar food and coffee stops.
+                    - id: 2
+                      name: BK
+                      description: Casual burger cafe for quick meals and visit feedback.
+                    - id: 3
+                      name: KFC
+                      description: Fast-service chicken cafe for meal and service feedback.
   /feedback:
     post:
       tags: [Feedback]
@@ -24,6 +53,7 @@ paths:
             examples:
               valid:
                 value:
+                  cafe_id: 1
                   email: person@example.com
                   comment: Great coffee.
                   rating: 5
@@ -39,11 +69,16 @@ paths:
                 created:
                   value:
                     id: 1
+                    cafe_id: 1
                     email: person@example.com
                     comment: Great coffee.
                     rating: 5
                     highlight: Coffee
                     created_at: "2026-07-02T00:00:00+00:00"
+                    cafe:
+                      id: 1
+                      name: "McDonald's"
+                      description: Quick-service cafe counter for familiar food and coffee stops.
         "400":
           $ref: "#/components/responses/BadRequest"
         "415":
@@ -77,11 +112,29 @@ components:
           schema:
             $ref: "#/components/schemas/ErrorResponse"
   schemas:
-    FeedbackCreate:
+    Cafe:
       type: object
-      required: [email, comment, rating, highlight]
+      required: [id, name, description]
       additionalProperties: false
       properties:
+        id:
+          type: integer
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        description:
+          type: string
+          minLength: 1
+          maxLength: 1000
+    FeedbackCreate:
+      type: object
+      required: [cafe_id, email, comment, rating, highlight]
+      additionalProperties: false
+      properties:
+        cafe_id:
+          type: integer
+          minimum: 1
         email:
           type: string
           format: email
@@ -100,10 +153,12 @@ components:
           enum: [Food, Coffee, Service, Atmosphere]
     FeedbackResponse:
       type: object
-      required: [id, email, comment, rating, highlight, created_at]
+      required: [id, cafe_id, email, comment, rating, highlight, created_at, cafe]
       additionalProperties: false
       properties:
         id:
+          type: integer
+        cafe_id:
           type: integer
         email:
           type: string
@@ -123,6 +178,8 @@ components:
         created_at:
           type: string
           format: date-time
+        cafe:
+          $ref: "#/components/schemas/Cafe"
     ErrorResponse:
       type: object
       required: [title, detail, status]

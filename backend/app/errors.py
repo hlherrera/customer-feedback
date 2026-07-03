@@ -6,10 +6,19 @@ from connexion.exceptions import BadRequestProblem, ProblemException
 from connexion.lifecycle import ConnexionRequest, ConnexionResponse
 
 FIELD_LABELS = {
+    "cafe_id": "Cafe",
     "comment": "Comment",
     "email": "Email",
     "highlight": "Visit highlight",
     "rating": "Rating",
+}
+
+FIELD_VALIDATION_MESSAGES = {
+    "cafe_id": "Cafe must be one of the available cafes.",
+    "comment": "Comment is required.",
+    "email": "Email must be a valid email address.",
+    "highlight": "Visit highlight must be Food, Coffee, Service, or Atmosphere.",
+    "rating": "Rating must be a whole number between 1 and 5.",
 }
 
 
@@ -49,18 +58,9 @@ def _clear_bad_request_detail(detail: str | None) -> str:
     if unexpected:
         return f"Unexpected field: {unexpected.group(1)}."
 
-    field = re.search(r" - '([^']+)'$", detail)
-    field_name = field.group(1) if field else ""
-
-    if field_name == "email":
-        return "Email must be a valid email address."
-    if field_name == "comment":
-        return "Comment is required."
-    if field_name == "rating":
-        return "Rating must be a whole number between 1 and 5."
-    if field_name == "highlight":
-        return "Visit highlight must be Food, Coffee, Service, or Atmosphere."
-
+    invalid_field = re.search(r" - '([^']+)'$", detail)
+    if invalid_field:
+        return FIELD_VALIDATION_MESSAGES.get(invalid_field.group(1), detail)
     return detail
 
 

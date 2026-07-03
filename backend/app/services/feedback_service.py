@@ -1,4 +1,4 @@
-from typing import Any, cast
+from typing import Any
 
 from pydantic import BaseModel, ConfigDict
 
@@ -8,6 +8,7 @@ from app.repositories.feedback_repository import FeedbackData, FeedbackRepositor
 class FeedbackCreateModel(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
+    cafe_id: int
     email: str
     comment: str
     rating: int
@@ -18,7 +19,13 @@ class FeedbackValidationService:
     def validate_create(self, payload: dict[str, Any] | None) -> FeedbackData:
         # OpenAPI handles API constraints; Pydantic normalizes the internal shape.
         model = FeedbackCreateModel.model_validate(payload or {})
-        return cast(FeedbackData, model.model_dump())
+        return {
+            "cafe_id": model.cafe_id,
+            "email": model.email,
+            "comment": model.comment,
+            "rating": model.rating,
+            "highlight": model.highlight,
+        }
 
 
 class FeedbackPersistenceService:

@@ -3,21 +3,40 @@ import { emptyFeedbackDraft } from "./constants";
 import { FeedbackForm } from "./components/FeedbackForm";
 import { FeedbackList } from "./components/FeedbackList";
 import { StatusMessage } from "./components/StatusMessage";
-import { createFeedback, listFeedback } from "./lib/feedbackApi";
+import { createFeedback, listCafes, listFeedback } from "./lib/feedbackApi";
 import { validateFeedbackDraft } from "./lib/feedback";
-import type { Feedback, FeedbackDraft, FeedbackErrors } from "./types";
+import type { Cafe, Feedback, FeedbackDraft, FeedbackErrors } from "./types";
 
 type SubmissionStatus = { tone: "success" | "error"; message: string } | null;
 
 const App = () => {
   const [draft, setDraft] = useState<FeedbackDraft>(() => emptyFeedbackDraft());
   const [errors, setErrors] = useState<FeedbackErrors>({});
+  const [cafes, setCafes] = useState<Cafe[]>([]);
   const [feedback, setFeedback] = useState<Feedback[]>([]);
   const [status, setStatus] = useState<SubmissionStatus>(null);
+  const [isCafeLoading, setIsCafeLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     let active = true;
+
+    listCafes()
+      .then((items) => {
+        if (active) {
+          setCafes(items);
+        }
+      })
+      .catch((error: Error) => {
+        if (active) {
+          setStatus({ tone: "error", message: error.message });
+        }
+      })
+      .finally(() => {
+        if (active) {
+          setIsCafeLoading(false);
+        }
+      });
 
     listFeedback()
       .then((items) => {
@@ -85,8 +104,10 @@ const App = () => {
           ) : null}
 
           <FeedbackForm
+            cafes={cafes}
             draft={draft}
             errors={errors}
+            isCafeLoading={isCafeLoading}
             isSubmitting={isSubmitting}
             onChange={setDraft}
             onSubmit={submitFeedback}

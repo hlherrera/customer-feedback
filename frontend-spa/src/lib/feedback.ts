@@ -15,6 +15,10 @@ type ValidationResult =
 const highlightValues = HIGHLIGHTS as [Highlight, ...Highlight[]];
 
 const feedbackDraftSchema = z.object({
+  cafe_id: z
+    .number("Choose a cafe.")
+    .int("Choose a cafe.")
+    .min(1, "Choose a cafe."),
   email: z
     .string()
     .trim()

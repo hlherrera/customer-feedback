@@ -1,5 +1,6 @@
-import type { Feedback, FeedbackPayload } from "../types";
+import type { Cafe, Feedback, FeedbackPayload } from "../types";
 
+const cafesPath = "/api/cafes";
 const feedbackPath = "/api/feedback";
 
 const readError = async (response: Response): Promise<string> => {
@@ -9,28 +10,27 @@ const readError = async (response: Response): Promise<string> => {
   );
 };
 
-export const listFeedback = async (): Promise<Feedback[]> => {
-  const response = await fetch(feedbackPath);
+const requestJson = async <ResponseBody>(
+  path: string,
+  init?: RequestInit,
+): Promise<ResponseBody> => {
+  const response = await fetch(path, init);
 
   if (!response.ok) {
     throw new Error(await readError(response));
   }
 
-  return response.json() as Promise<Feedback[]>;
+  return response.json() as Promise<ResponseBody>;
 };
 
-export const createFeedback = async (
-  payload: FeedbackPayload,
-): Promise<Feedback> => {
-  const response = await fetch(feedbackPath, {
+export const listFeedback = (): Promise<Feedback[]> =>
+  requestJson<Feedback[]>(feedbackPath);
+
+export const listCafes = (): Promise<Cafe[]> => requestJson<Cafe[]>(cafesPath);
+
+export const createFeedback = (payload: FeedbackPayload): Promise<Feedback> =>
+  requestJson<Feedback>(feedbackPath, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
-
-  if (!response.ok) {
-    throw new Error(await readError(response));
-  }
-
-  return response.json() as Promise<Feedback>;
-};

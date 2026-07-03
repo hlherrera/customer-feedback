@@ -27,6 +27,9 @@ export const FeedbackList = ({ feedback }: FeedbackListProps) => (
               <span className="font-semibold text-ink">{item.email}</span>
               <span>{formatFeedbackDate(item.created_at)}</span>
             </div>
+            <p className="mt-1 text-sm font-medium text-cafe-700">
+              {item.cafe.name}
+            </p>
             <p className="mt-2 text-sm leading-6 text-ink">{item.comment}</p>
             <div className="mt-3 flex flex-wrap gap-2 text-xs font-medium text-cafe-700">
               <span className="rounded-full bg-white px-2.5 py-1">

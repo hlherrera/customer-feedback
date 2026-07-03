@@ -1,0 +1,15 @@
+meta {
+  name: list cafes
+  type: http
+  seq: 0
+}
+
+get {
+  url: {{baseUrl}}/cafes
+}
+
+tests {
+  test("ok", function () {
+    expect(res.status).to.equal(200);
+  });
+}

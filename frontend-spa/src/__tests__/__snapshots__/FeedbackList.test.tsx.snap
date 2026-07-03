@@ -37,6 +37,11 @@ exports[`FeedbackList matches the recent feedback snapshot 1`] = `
         </span>
       </div>
       <p
+        class="mt-1 text-sm font-medium text-cafe-700"
+      >
+        McDonald's
+      </p>
+      <p
         class="mt-2 text-sm leading-6 text-ink"
       >
         Great coffee and calm service.

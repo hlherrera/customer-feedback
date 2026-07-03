@@ -4,13 +4,27 @@ def test_feedback_requires_fields(client):
     assert response.json() == {
         "type": "about:blank",
         "title": "Bad Request",
-        "detail": "Email is required.",
+        "detail": "Cafe is required.",
         "status": 400,
     }
 
 
+def test_feedback_requires_cafe(client):
+    payload = {
+        "email": "person@example.com",
+        "comment": "Nice visit.",
+        "rating": 4,
+        "highlight": "Service",
+    }
+
+    response = client.post("/api/feedback", json=payload)
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Cafe is required."
+
+
 def test_feedback_validates_values(client):
     payload = {
+        "cafe_id": 1,
         "email": "bad-email",
         "comment": "",
         "rating": 6,
@@ -24,6 +38,7 @@ def test_feedback_validates_values(client):
 
 def test_feedback_validates_email_format(client):
     payload = {
+        "cafe_id": 1,
         "email": "bad-email",
         "comment": "Nice visit.",
         "rating": 4,
@@ -37,6 +52,7 @@ def test_feedback_validates_email_format(client):
 
 def test_feedback_rejects_extra_fields(client):
     payload = {
+        "cafe_id": 1,
         "email": "person@example.com",
         "comment": "Nice visit.",
         "rating": 4,
@@ -51,6 +67,7 @@ def test_feedback_rejects_extra_fields(client):
 
 def test_feedback_validates_rating_range(client):
     payload = {
+        "cafe_id": 1,
         "email": "person@example.com",
         "comment": "Nice visit.",
         "rating": 6,
@@ -67,6 +84,7 @@ def test_feedback_validates_rating_range(client):
 
 def test_feedback_validates_highlight_options(client):
     payload = {
+        "cafe_id": 1,
         "email": "person@example.com",
         "comment": "Nice visit.",
         "rating": 4,

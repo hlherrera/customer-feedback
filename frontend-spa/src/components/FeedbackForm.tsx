@@ -1,21 +1,26 @@
 import type { SubmitEvent } from "react";
+import { CafeSelect } from "./CafeSelect";
 import { Field } from "./Field";
 import { HighlightSelect } from "./HighlightSelect";
 import { RatingInput } from "./RatingInput";
 import { emailPattern } from "../lib/feedback";
-import type { FeedbackDraft, FeedbackErrors } from "../types";
+import type { Cafe, FeedbackDraft, FeedbackErrors } from "../types";
 
 type FeedbackFormProps = {
+  cafes: Cafe[];
   draft: FeedbackDraft;
   errors: FeedbackErrors;
+  isCafeLoading: boolean;
   isSubmitting: boolean;
   onChange: (draft: FeedbackDraft) => void;
   onSubmit: () => void;
 };
 
 export const FeedbackForm = ({
+  cafes,
   draft,
   errors,
+  isCafeLoading,
   isSubmitting,
   onChange,
   onSubmit,
@@ -30,6 +35,16 @@ export const FeedbackForm = ({
       className="space-y-5 rounded border border-cafe-200 bg-white p-5 shadow-sm"
       onSubmit={submit}
     >
+      <Field label="Cafe" htmlFor="cafe_id" error={errors.cafe_id}>
+        <CafeSelect
+          cafes={cafes}
+          id="cafe_id"
+          value={draft.cafe_id}
+          isLoading={isCafeLoading}
+          onChange={(cafeId) => onChange({ ...draft, cafe_id: cafeId })}
+        />
+      </Field>
+
       <Field label="Email" htmlFor="email" error={errors.email}>
         <input
           className="h-11 w-full rounded border border-cafe-200 px-3 text-ink outline-none transition focus:border-cafe-500 focus:ring-2 focus:ring-cafe-100"
@@ -78,7 +93,7 @@ export const FeedbackForm = ({
       <button
         className="h-11 w-full rounded bg-cafe-700 px-4 text-sm font-semibold text-white transition hover:bg-cafe-500 disabled:cursor-not-allowed disabled:bg-cafe-200 disabled:text-cafe-700"
         type="submit"
-        disabled={isSubmitting}
+        disabled={isSubmitting || isCafeLoading || cafes.length === 0}
       >
         {isSubmitting ? "Sending..." : "Submit feedback"}
       </button>

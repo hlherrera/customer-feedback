@@ -1,12 +1,20 @@
-from typing import Protocol
+from typing import Protocol, TypedDict
 
 from sqlalchemy import select
+from sqlalchemy.orm import joinedload
 
 from app.db.database import SessionFactory
 from app.db.models import Feedback
 
-FeedbackData = dict[str, int | str]
-FeedbackRow = dict[str, int | str]
+FeedbackRow = dict[str, object]
+
+
+class FeedbackData(TypedDict):
+    cafe_id: int
+    email: str
+    comment: str
+    rating: int
+    highlight: str
 
 
 class FeedbackRepository(Protocol):
@@ -32,7 +40,11 @@ class SqlAlchemyFeedbackRepository:
 
     def list(self) -> list[FeedbackRow]:
         with self._session_factory() as session:
-            rows = session.scalars(select(Feedback).order_by(Feedback.id)).all()
+            rows = session.scalars(
+                select(Feedback)
+                .options(joinedload(Feedback.cafe))
+                .order_by(Feedback.id)
+            ).all()
             return [_to_row(row) for row in rows]
 
 
@@ -40,9 +52,15 @@ def _to_row(feedback: Feedback) -> FeedbackRow:
     # Return plain JSON-ready data so controllers do not know ORM details.
     return {
         "id": feedback.id,
+        "cafe_id": feedback.cafe_id,
         "email": feedback.email,
         "comment": feedback.comment,
         "rating": feedback.rating,
         "highlight": feedback.highlight,
         "created_at": feedback.created_at.isoformat(),
+        "cafe": {
+            "id": feedback.cafe.id,
+            "name": feedback.cafe.name,
+            "description": feedback.cafe.description,
+        },
     }

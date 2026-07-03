@@ -4,10 +4,11 @@ Small customer feedback app for a local cafe. The React SPA runs in the browser,
 validates the form, submits to the API, and the backend persists submissions to
 a database.
 
-The API requires `email`, `comment`, `rating`, and `highlight`. Invalid requests
-return `application/problem+json` with a clear `detail` message. Email is checked
-with a regex in the frontend, ratings are whole numbers from 1 to 5, and
-highlights are limited to `Food`, `Coffee`, `Service`, or `Atmosphere`.
+The API seeds cafe/store choices at `/api/cafes`. Feedback requests require
+`cafe_id`, `email`, `comment`, `rating`, and `highlight`. Invalid requests return
+`application/problem+json` with a clear `detail` message. Email is checked with a
+regex in the frontend, ratings are whole numbers from 1 to 5, and highlights are
+limited to `Food`, `Coffee`, `Service`, or `Atmosphere`.
 
 ## Run Locally
 
@@ -34,7 +35,9 @@ cp .env.example .env
 uv run python run.py
 ```
 
-This creates `backend/feedback.db` and stores submissions there.
+This creates `backend/feedback.db`, seeds the default cafes, and stores
+submissions there. If you already have an older local `feedback.db`, remove it so
+SQLAlchemy can create the new `cafe_id` feedback column.
 
 Start the frontend in another terminal:
 
@@ -44,8 +47,13 @@ corepack pnpm install
 corepack pnpm dev
 ```
 
+If the backend runs on a different port, create `frontend-spa/.env` and set
+`VITE_API_PROXY_TARGET`, for example
+`VITE_API_PROXY_TARGET=http://127.0.0.1:8010`.
+
 Frontend: `http://127.0.0.1:5173`
 API: `http://127.0.0.1:8000/api/feedback`
+Cafes: `http://127.0.0.1:8000/api/cafes`
 
 To run the API with Postgres instead of SQLite:
 
